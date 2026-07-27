@@ -90,9 +90,9 @@ if submit_button:
     with st.spinner("Auditing laboratory parameters against Pakistan NEQS..."):
         try:
             response = client.models.generate_content(
-                model="gemini-2.5-flash",
-                contents=f"{SYSTEM_PROMPT}\n\nUSER LAB DATA FOR AUDIT:\n{user_payload}"
-            )
+    model="gemini-1.5-flash",
+    contents=f"{SYSTEM_PROMPT}\n\nUSER LAB DATA FOR AUDIT:\n{user_payload}"
+)
             
             st.divider()
             st.subheader("📋 Official NEQS Audit Report")
