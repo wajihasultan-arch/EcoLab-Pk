@@ -18,18 +18,23 @@ Analyze laboratory water parameters directly against **Pakistan's National Envir
 st.sidebar.header("ℹ️ Project Info & API Setup")
 st.sidebar.write("Built for Environmental Science laboratory practicals and industrial compliance evaluation in Pakistan.")
 
-# Fetch API Key from environment or Streamlit Secrets
-api_key = os.getenv("GEMINI_API_KEY")
+# Fetch API Key from environment or Streamlit Secrets (and clean extraneous quotes/spaces)
+raw_api_key = os.getenv("GEMINI_API_KEY", "")
+api_key = raw_api_key.strip().strip('"').strip("'")
 
 if not api_key:
-    # Sidebar fallback for local testing
-    api_key = st.sidebar.text_input("Enter Gemini API Key (Local Testing)", type="password")
+    sidebar_key = st.sidebar.text_input("Enter Gemini API Key (Local Testing)", type="password")
+    api_key = sidebar_key.strip().strip('"').strip("'")
     if not api_key:
         st.warning("👈 API Key not detected. Please add `GEMINI_API_KEY` to Streamlit Secrets or enter it in the sidebar.")
         st.stop()
 
 # Initialize Google GenAI Client
-client = genai.Client(api_key=api_key)
+try:
+    client = genai.Client(api_key=api_key)
+except Exception as init_err:
+    st.error(f"Failed to initialize Gemini client: {init_err}")
+    st.stop()
 
 # Input Form
 st.subheader("🧪 Input Laboratory Wastewater Parameters")
@@ -88,15 +93,28 @@ if submit_button:
     """
     
     with st.spinner("Auditing laboratory parameters against Pakistan NEQS..."):
-        # Auto-fallback array trying active model variants in order
-        candidate_models = ["gemini-2.5-flash", "gemini-2.5-pro", "gemini-2.0-flash", "gemini-1.5-flash-latest"]
+        # 1. Fetch available model list directly from your API key permissions
+        discovered_models = []
+        try:
+            for m in client.models.list():
+                m_name = getattr(m, 'name', '')
+                if any(k in m_name.lower() for k in ['flash', 'pro', 'gemini']):
+                    discovered_models.append(m_name)
+        except Exception:
+            pass
+
+        # 2. Fallback pool if listing fails
+        if not discovered_models:
+            discovered_models = ["gemini-2.0-flash", "gemini-2.5-flash", "models/gemini-2.0-flash", "models/gemini-2.5-flash"]
+
         response = None
         last_error = None
-        
-        for model_name in candidate_models:
+
+        # 3. Iterate through available models until one responds
+        for model_identifier in discovered_models:
             try:
                 response = client.models.generate_content(
-                    model=model_name,
+                    model=model_identifier,
                     contents=f"{SYSTEM_PROMPT}\n\nUSER LAB DATA FOR AUDIT:\n{user_payload}"
                 )
                 if response and response.text:
@@ -111,3 +129,4 @@ if submit_button:
             st.markdown(response.text)
         else:
             st.error(f"Error connecting to AI service: {last_error}")
+            st.info("💡 **Key Check:** Please verify that your key is active at [aistudio.google.com](https://aistudio.google.com/) and that you pasted only the key string (without extra quotes) in Streamlit Secrets.")
