@@ -59,7 +59,7 @@ Provide 2 practical, cost-effective remediation strategies suited for local Paki
 ---
 
 ## 🖼️ Screenshots
-![App Form Interface](./screenshots/screenshot1.png)  
+![image alt](https://github.com/wajihasultan-arch/EcoLab-Pk/blob/07e216252169b979a49db98b9cea8ff5638949da/Screenshot%20%20(1).png)  
 *Figure 1: Input form for entering laboratory wastewater readings.*
 
 ![AI Processing & Audit Execution](./screenshots/screenshot2.png)  
