@@ -62,10 +62,10 @@ Provide 2 practical, cost-effective remediation strategies suited for local Paki
 ![image alt](https://github.com/wajihasultan-arch/EcoLab-Pk/blob/07e216252169b979a49db98b9cea8ff5638949da/Screenshot%20%20(1).png)  
 *Figure 1: Input form for entering laboratory wastewater readings.*
 
-![AI Processing & Audit Execution](./screenshots/screenshot2.png)  
+![image alt](https://github.com/wajihasultan-arch/EcoLab-Pk/blob/1135381a96d24231c8d3d45a7ee87a129d2923a9/Screenshot%20%20(2).png)  
 *Figure 2: Execution of NEQS diagnostic audit.*
 
-![NEQS Compliance Report Output](./screenshots/screenshot3.png)  
+![image alt](https://github.com/wajihasultan-arch/EcoLab-Pk/blob/1135381a96d24231c8d3d45a7ee87a129d2923a9/Screenshot%20%20(3).png)  
 *Figure 3: Generated NEQS compliance table, ecological risks, and localized remediation strategies.*
 
 ---
