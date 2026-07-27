@@ -88,15 +88,26 @@ if submit_button:
     """
     
     with st.spinner("Auditing laboratory parameters against Pakistan NEQS..."):
-        try:
-            response = client.models.generate_content(
-    model="gemini-2.5-flash-lite",
-    contents=f"{SYSTEM_PROMPT}\n\nUSER LAB DATA FOR AUDIT:\n{user_payload}"
-)
-            
+        # Auto-fallback array trying active model variants in order
+        candidate_models = ["gemini-2.5-flash", "gemini-2.5-pro", "gemini-2.0-flash", "gemini-1.5-flash-latest"]
+        response = None
+        last_error = None
+        
+        for model_name in candidate_models:
+            try:
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=f"{SYSTEM_PROMPT}\n\nUSER LAB DATA FOR AUDIT:\n{user_payload}"
+                )
+                if response and response.text:
+                    break
+            except Exception as err:
+                last_error = err
+                continue
+
+        if response and response.text:
             st.divider()
             st.subheader("📋 Official NEQS Audit Report")
             st.markdown(response.text)
-            
-        except Exception as e:
-            st.error(f"Error connecting to AI service: {e}")
+        else:
+            st.error(f"Error connecting to AI service: {last_error}")
