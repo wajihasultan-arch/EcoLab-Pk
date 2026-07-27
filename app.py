@@ -90,7 +90,7 @@ if submit_button:
     with st.spinner("Auditing laboratory parameters against Pakistan NEQS..."):
         try:
             response = client.models.generate_content(
-    model="gemini-1.5-flash",
+    model="gemini-2.5-flash-lite",
     contents=f"{SYSTEM_PROMPT}\n\nUSER LAB DATA FOR AUDIT:\n{user_payload}"
 )
             
