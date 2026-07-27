@@ -79,7 +79,7 @@ Provide 2 practical, cost-effective remediation strategies suited for local Paki
 ### Installation Steps
 1. Clone the repository:
    \`\`\`bash
-   git clone https://github.com/YOUR_USERNAME/ecolab-pk.git
+   git clone https://github.com/wajihasultan-arch/EcoLab-Pk
    cd ecolab-pk
    \`\`\`
 
